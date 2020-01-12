@@ -43,3 +43,21 @@ alias ndoom="cd ~/.doom.d"
 ###########################################
 alias drefresh="~/.emacs.d/bin/doom refresh"
 
+###########################################
+# Ubuntu
+###########################################
+alias update="sudo apt-get update"
+alias upgrade="sudo apt-get upgrade"
+alias upd-upg="sudo apt-get update && sudo apt-get upgrade -y"
+alias ubuntu="lsb_release -a"
+alias sys="neofetch"
+alias style="termite-style; termite-style" # First navigates to directory, second launches program.
+
+install () {
+  sudo apt-get install $1
+}
+
+remove () {
+  sudo apt-get remove $1
+}
+
