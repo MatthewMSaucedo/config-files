@@ -1,57 +1,55 @@
-###########################################
+################
 # GITHUB
-###########################################
-# Fetch updates.
+############################################################
 alias gf="git fetch"
-
-# Update branch to take in changes from master.
 alias grom="gf; git rebase origin/master"
-
-# Stage all changed files.
 alias gaa="git add -A"
-
-# Commit staged files with same message as last commit.
 alias gcan="git commit --amend --no-edit"
-
-# Stage changes with previous commit message. (smaller commit history).
 alias gacan="gaa; gcan"
-
-# Push commit to branch.
 alias gp="git push"
 alias gpf="git push -f"
+alias pull="git pull"
+alias gpom="git pull origin master"
 
-###########################################
-# WEB DEVELOPMENT
-###########################################
-# Start server (node).
-alias server="npm run start:server"
+clone () {
+  git clone $1;
+}
 
-# Run local React environment.
-alias rs="npm start"
+nb () {
+  git checkout -b $1;
+}
 
-# Run local Angular environment.
+gacp () {
+  gaa; git commit -m "$1"; gpf;
+}
+
+
+
+################
+# NAVIGATION
+############################################################
+alias nc="cd ~/code"
+alias ninrb="nc; cd imNotRacistBot"
+alias nps="nc; cd MSaucedoWeb"
+alias nbm="nc; cd budget-me"
+alias nconfig="nc; cd bash_config"
+alias ncsi="nc; cd acquia/CoronaStateInfo"
+
+
+
+###############
+# WEB DEV
+############################################################
 alias ngs="ng serve"
 
-###########################################
-# NAVIGATION
-###########################################
-alias nc="cd ~/desktop/code"
-alias ndoom="cd ~/.doom.d"
 
-###########################################
-# DOOM
-###########################################
-alias drefresh="~/.emacs.d/bin/doom refresh"
 
-###########################################
-# Ubuntu
-###########################################
+###############
+# APT-GET
+############################################################
 alias update="sudo apt-get update"
 alias upgrade="sudo apt-get upgrade"
 alias upd-upg="sudo apt-get update && sudo apt-get upgrade -y"
-alias ubuntu="lsb_release -a"
-alias sys="neofetch"
-alias style="termite-style; termite-style" # First navigates to directory, second launches program.
 
 install () {
   sudo apt-get install $1
@@ -60,4 +58,44 @@ install () {
 remove () {
   sudo apt-get remove $1
 }
+
+
+
+################
+# SYSTEM
+############################################################
+alias ubuntu="lsb_release -a"
+alias sys="neofetch"
+alias cpu="sensors"
+alias ssd="sudo hddtemp /dev/sda1"
+alias hdd="sudo hddtemp /dev/sdb1"
+alias gpu="watch -n 2 nvidia-smi"
+
+terminate () {
+  pkill -f $1;
+}
+
+# Takes port number and kills any running process there
+killprocess () {
+  fuser -k ${1}/tcp;
+}
+
+
+
+################
+# MISC
+############################################################
+alias style="termite-style; termite-style" # First navigates to directory, second launches program.
+alias vls="ls -1" # Vertical print of directory contents.
+alias vlsa="ls -1a"
+
+javar () {
+  javac ${1}.java;
+  java $1;
+}
+
+brrr () {
+  sudo $1;
+}
+
 
