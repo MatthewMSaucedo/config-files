@@ -3,6 +3,7 @@
 ############################################################
 alias gf="git fetch"
 alias grom="gf; git rebase origin/master"
+alias grot="gf; git rebase origin/testing"
 alias gaa="git add -A"
 alias gcan="git commit --amend --no-edit"
 alias gacan="gaa; gcan"
@@ -10,6 +11,7 @@ alias gp="git push"
 alias gpf="git push -f"
 alias pull="git pull"
 alias gpom="git pull origin master"
+alias cb="git rev-parse --abbrev-ref HEAD"
 
 clone () {
   git clone $1;
@@ -29,34 +31,20 @@ gacp () {
 # NAVIGATION
 ############################################################
 alias nc="cd ~/code"
-alias ninrb="nc; cd imNotRacistBot"
-alias nps="nc; cd MSaucedoWeb"
-alias nbm="nc; cd budget-me"
-alias nconfig="nc; cd bash_config"
-alias ncsi="nc; cd acquia/CoronaStateInfo"
+alias nima="nc; cd im-alexa"
+alias nr="nc; cd rest"
+alias nconfig="nc; cd config-files"
+alias nccs="nc; cd cam_connection"
+alias nh="cd ~"
 
 
 
-###############
-# WEB DEV
+################
+# SSH
 ############################################################
-alias ngs="ng serve"
-
-
-
-###############
-# APT-GET
-############################################################
-alias update="sudo apt-get update"
-alias upgrade="sudo apt-get upgrade"
-alias upd-upg="sudo apt-get update && sudo apt-get upgrade -y"
-
-install () {
-  sudo apt-get install $1
-}
-
-remove () {
-  sudo apt-get remove $1
+box() {
+  mwinit -o;
+  ssh ec2-user@${1};
 }
 
 
@@ -64,12 +52,9 @@ remove () {
 ################
 # SYSTEM
 ############################################################
-alias ubuntu="lsb_release -a"
 alias sys="neofetch"
-alias cpu="sensors"
-alias ssd="sudo hddtemp /dev/sda1"
-alias hdd="sudo hddtemp /dev/sdb1"
-alias gpu="watch -n 2 nvidia-smi"
+alias doom="~/.emacs.d/bin/doom"
+alias emacs="/usr/local/Cellar/emacs-plus@26/26.3/bin/emacs"
 
 terminate () {
   pkill -f $1;
@@ -85,17 +70,9 @@ killprocess () {
 ################
 # MISC
 ############################################################
-alias style="termite-style; termite-style" # First navigates to directory, second launches program.
-alias vls="ls -1" # Vertical print of directory contents.
-alias vlsa="ls -1a"
-
-javar () {
-  javac ${1}.java;
-  java $1;
-}
-
 brrr () {
   sudo $1;
 }
+
 
 
