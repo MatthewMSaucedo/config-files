@@ -8,11 +8,16 @@ alias gaa="git add -A"
 alias gcan="git commit --amend --no-edit"
 alias gacan="gaa; gcan"
 alias gp="git push"
-alias gpf="git push -f"
+alias gpf="git push --force-with-lease"
+alias gup="gacan;gpf"
 alias pull="git pull"
 alias gpom="git pull origin master"
+alias gpot="git pull origin testing"
 alias cb="git rev-parse --abbrev-ref HEAD"
 alias branch="git branch"
+alias gfp="git fetch; git pull"
+alias remote="git remote set-url origin "
+alias mergeymerge="git merge --no-ff origin/feat_subscriptions"
 
 checkout () {
   git checkout $1;
@@ -53,6 +58,7 @@ alias ...="cd ../.."
 alias auth="mwinit -o"
 alias tron="nh; . myvenv/bin/activate"
 alias aws="source ~/.bashrc; . p -t clon"
+alias steve="echo | openssl s_client -connect bluebell-linking-service-beta.integ.amazon.com:443 2>/dev/null | openssl x509 -text | grep -i issuer Issuer: CN=Amazon.com InfoSec CA G4 ACM2"
 
 logline () {
   echo "docker logs -f blink-${1}"
@@ -68,6 +74,7 @@ box() {
 }
 
 db() {
+  aws;
   m -t $1 -c ${1}/rds/immediamaster;
 }
 
@@ -108,7 +115,7 @@ brrr () {
   sudo $1;
 }
 
-alias please="sudo !!"
+alias please='sudo $(history -p !!)'
 
 alias rr="curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash"
 
