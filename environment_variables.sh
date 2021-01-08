@@ -1,5 +1,5 @@
 # nano is gross
-export VISUAL=vim
+export VISUAL=emacs
 export EDITOR="$VISUAL"
 
 # android java location

@@ -38,6 +38,18 @@ gacp () {
 
 
 ################
+# AMAZON CR
+############################################################
+alias crn="cr -new"
+
+# cr update
+cru () {
+  cr -r CR-${1}
+}
+
+
+
+################
 # NAVIGATION
 ############################################################
 alias nc="cd ~/code"
@@ -55,10 +67,16 @@ alias ...="cd ../.."
 ################
 # REMOTE
 ############################################################
-alias auth="mwinit -o"
 alias tron="nh; . myvenv/bin/activate"
 alias aws="source ~/.bashrc; . p -t clon"
-alias steve="echo | openssl s_client -connect bluebell-linking-service-beta.integ.amazon.com:443 2>/dev/null | openssl x509 -text | grep -i issuer Issuer: CN=Amazon.com InfoSec CA G4 ACM2"
+
+auth () {
+  if [ $1 == "amz" ]; then
+    kinit;
+  else
+    mwinit -o;
+  fi
+}
 
 logline () {
   echo "docker logs -f blink-${1}"
@@ -74,11 +92,25 @@ box() {
 }
 
 db() {
-  aws;
-  m -t $1 -c ${1}/rds/immediamaster;
+  if [ $1 == "sqa3" ]; then
+    . p -t sqa3 -f -r ReadOnly;
+    m -t sqa3;
+  else
+    aws;
+    m -t $1 -c ${1}/rds/immediamaster;
+  fi
 }
 
-
+aws-logs() {
+  if [ $1 == "sqa3" ]; then
+    . p -t sqa3 -f -r ReadOnly;
+  elif [ $1 == "subsrc" ]; then
+    . p -t subsrc -f -r ReadOnly;
+  else
+    . p -t clon;
+  fi
+  awslogs get -GS -w -s '1 hour ago' ${1}-${2}
+}
 
 ################
 # SYSTEM
@@ -125,3 +157,4 @@ ugh () {
   sudo jamf policy -event profile-internally-signed-certificates;
 }
 
+alias hack="say -r 30 -v Yuri 'Your social security number has been compromised. Press 1 to speak to an officer.'"
