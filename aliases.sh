@@ -19,32 +19,20 @@ alias gfp="git fetch; git pull"
 alias remote="git remote set-url origin "
 alias mergeymerge="git merge --no-ff origin/feat_subscriptions"
 
-checkout () {
+checkout() {
   git checkout $1;
 }
 
-clone () {
+clone() {
   git clone $1;
 }
 
-nb () {
+nb() {
   git checkout -b $1;
 }
 
-gacp () {
+gacp() {
   gaa; git commit -m "$1"; gpf;
-}
-
-
-
-################
-# AMAZON CR
-############################################################
-alias crn="cr -new"
-
-# cr update
-cru () {
-  cr -r CR-${1}
 }
 
 
@@ -65,52 +53,33 @@ alias ...="cd ../.."
 
 
 ################
-# REMOTE
+# WRITING
 ############################################################
-alias tron="nh; . myvenv/bin/activate"
-alias aws="source ~/.bashrc; . p -t clon"
-
-auth () {
-  if [ $1 == "amz" ]; then
-    kinit;
+# TODO: Add check that second argument is ucb
+pdf() {
+  if [ "$#" -ne 2 ]; then
+    afterwriting --source ${1}.fountain --pdf;
   else
-    mwinit -o;
+    if [$2 == "ucb"]; then
+      afterwriting --source ${1}.fountain --pdf --setting print_title_page=false
+    else
+      echo "pdf(sketch_name:, ucb)"
+    fi
   fi
 }
 
-logline () {
-  echo "docker logs -f blink-${1}"
-}
-
-box() {
-  if [ $1 == "-a" ]; then
-    auth;
-    ssh ec2-user@${2};
+# TODO: Add check that second argument is ucb
+refresh () {
+  if [ "$#" -ne 2 ]; then
+    rm ${1}.pdf;
+    pdf $1;
   else
-    ssh ec2-user@${1};
+    rm ${1}.pdf;
+    pdf $1 ucb;
   fi
 }
 
-db() {
-  if [ $1 == "sqa3" ]; then
-    . p -t sqa3 -f -r ReadOnly;
-    m -t sqa3;
-  else
-    aws;
-    m -t $1 -c ${1}/rds/immediamaster;
-  fi
-}
 
-aws-logs() {
-  if [ $1 == "sqa3" ]; then
-    . p -t sqa3 -f -r ReadOnly;
-  elif [ $1 == "subsrc" ]; then
-    . p -t subsrc -f -r ReadOnly;
-  else
-    . p -t clon;
-  fi
-  awslogs get -GS -w -s '1 hour ago' ${1}-${2}
-}
 
 ################
 # SYSTEM
@@ -120,21 +89,21 @@ alias doom="~/.emacs.d/bin/doom"
 alias emacs="/usr/local/Cellar/emacs-plus@26/26.3/bin/emacs"
 alias pretty="source ~/.bash_profile"
 
-install () {
+install() {
   brew install $1;
 }
 
-terminate () {
+terminate() {
   pkill -f $1;
 }
 
 # Takes port number and kills any running process there
-killprocess () {
+killprocess() {
   fuser -k ${1}/tcp;
 }
 
 # Sets screens to correct orientation
-screens () {
+screens() {
   displayplacer "id:73CF9F11-0C53-0B30-1C5A-34826A0F799A res:1792x1120 hz:59 color_depth:4 scaling:on origin:(0,0) degree:0" "id:55BB86DD-EA37-F203-9600-A7A5F4D7DC68 res:1920x1080 hz:60 color_depth:4 scaling:off origin:(1859,-291) degree:0" "id:F67ADA61-D9A7-DDB6-8486-57CF98E1A7CA res:1920x1080 hz:60 color_depth:4 scaling:off origin:(-61,-1080) degree:0" "id:549B5283-D8D6-7051-72CE-47D299985920 res:1080x1920 hz:60 color_depth:4 scaling:off origin:(-1141,-857) degree:270"
 }
 
@@ -143,7 +112,7 @@ screens () {
 ################
 # MISC
 ############################################################
-brrr () {
+brrr() {
   sudo $1;
 }
 
@@ -151,7 +120,7 @@ alias please='sudo $(history -p !!)'
 
 alias rr="curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash"
 
-ugh () {
+ugh() {
   kinit -f;
   sudo jamf policy -event profile-chrome;
   sudo jamf policy -event profile-internally-signed-certificates;
