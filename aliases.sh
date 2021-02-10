@@ -112,6 +112,14 @@ aws-logs() {
   awslogs get -GS -w -s '1 hour ago' ${1}-${2}
 }
 
+# box = $1
+# file_path = $2
+# example:
+# $ boxit stag rest/app/file.txt
+boxit() {
+  scp $2 ec2-user@${1}:/home/ec2-user/system/${2};
+}
+
 ################
 # SYSTEM
 ############################################################
