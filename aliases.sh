@@ -1,5 +1,5 @@
 ################
-# GITHUB
+# GIT
 ############################################################
 alias gf="git fetch"
 alias grom="gf; git rebase origin/master"
@@ -101,7 +101,11 @@ db() {
   fi
 }
 
-aws-logs() {
+logs-now () {
+  # activate virtual environment
+  tron;
+
+  # handle tier argument
   if [ $1 == "sqa3" ]; then
     . p -t sqa3 -f -r ReadOnly;
   elif [ $1 == "subsrc" ]; then
@@ -109,7 +113,32 @@ aws-logs() {
   else
     . p -t clon;
   fi
-  awslogs get -GS -w -s '1 hour ago' ${1}-${2}
+
+  awslogs get -GS -w -s '5 minutes ago' ${1}-${2}
+}
+
+# logs tier service -s "x hour/hours/days ago" -f "search string"
+logs() {
+  # activate virtual environment
+  tron;
+
+  # handle tier argument
+  if [ $1 == "sqa3" ]; then
+    . p -t sqa3 -f -r ReadOnly;
+  elif [ $1 == "subsrc" ]; then
+    . p -t subsrc -f -r ReadOnly;
+  elif [ $1 == "cprd" ]; then
+    . p -t cprd -f -r ReadOnly;
+  else
+    . p -t clon;
+  fi
+
+  # account for a search string
+  if [[ $# -ne 6 ]]; then
+    awslogs get -GS -s "${4}" ${1}-${2}
+  else
+    awslogs get -GS -s "${4}" -f "\"${6}\"" ${1}-${2}
+  fi
 }
 
 # box = $1
@@ -119,6 +148,8 @@ aws-logs() {
 boxit() {
   scp $2 ec2-user@${1}:/home/ec2-user/system/${2};
 }
+
+
 
 ################
 # SYSTEM
@@ -151,10 +182,6 @@ screens () {
 ################
 # MISC
 ############################################################
-brrr () {
-  sudo $1;
-}
-
 alias please='sudo $(history -p !!)'
 
 alias rr="curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash"
