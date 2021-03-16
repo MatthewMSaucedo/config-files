@@ -127,6 +127,8 @@ logs() {
     . p -t sqa3 -f -r ReadOnly;
   elif [ $1 == "subsrc" ]; then
     . p -t subsrc -f -r ReadOnly;
+  elif [ $1 == "subsprod" ]; then
+    . p -t subsprod -f -r ReadOnly;
   elif [ $1 == "cprd" ]; then
     . p -t cprd -f -r ReadOnly;
   else
@@ -146,7 +148,11 @@ logs() {
 # example:
 # $ boxit stag rest/app/file.txt
 boxit() {
-  scp $2 ec2-user@${1}:/home/ec2-user/system/${2};
+  if [ $1 == "tulsadev" ]; then
+    scp $2 ec2-user@${1}:/home/ec2-user/tulsa/${2};
+  else
+    scp $2 ec2-user@${1}:/home/ec2-user/system/${2};
+  fi
 }
 
 
