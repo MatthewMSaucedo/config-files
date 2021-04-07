@@ -68,7 +68,7 @@ alias ...="cd ../.."
 # REMOTE
 ############################################################
 alias tron="nh; . myvenv/bin/activate"
-alias aws="source ~/.bashrc; . p -t clon"
+alias awss="source ~/.bashrc; . p -t clon"
 
 auth () {
   if [ $1 == "amz" ]; then
@@ -92,11 +92,11 @@ box() {
 }
 
 db() {
-  if [ $1 == "sqa3" ]; then
-    . p -t sqa3 -f -r ReadOnly;
-    m -t sqa3;
+  if [[ $1 == *"sqa"* ]]; then
+    . p -t $1 -f -r ReadOnly;
+    m -t $1;
   else
-    aws;
+    . p -t clon -r Administrator -f
     m -t $1 -c ${1}/rds/immediamaster;
   fi
 }
@@ -122,17 +122,11 @@ logs() {
   # activate virtual environment
   tron;
 
-  # handle tier argument
-  if [ $1 == "sqa3" ]; then
-    . p -t sqa3 -f -r ReadOnly;
-  elif [ $1 == "subsrc" ]; then
-    . p -t subsrc -f -r ReadOnly;
-  elif [ $1 == "subsprod" ]; then
-    . p -t subsprod -f -r ReadOnly;
-  elif [ $1 == "cprd" ]; then
-    . p -t cprd -f -r ReadOnly;
+  # generate AWS credentials
+  if [ $1 == "tulsarc" ]; then
+    . p -t clon -f -r ReadOnly;
   else
-    . p -t clon;
+    . p -t $1 -f -r ReadOnly;
   fi
 
   # account for a search string
