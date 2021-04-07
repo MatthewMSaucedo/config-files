@@ -68,7 +68,6 @@ alias ...="cd ../.."
 # REMOTE
 ############################################################
 alias tron="nh; . myvenv/bin/activate"
-alias awss="source ~/.bashrc; . p -t clon"
 
 auth () {
   if [ $1 == "amz" ]; then
@@ -76,10 +75,6 @@ auth () {
   else
     mwinit -o;
   fi
-}
-
-logline () {
-  echo "docker logs -f blink-${1}"
 }
 
 box() {
@@ -101,21 +96,6 @@ db() {
   fi
 }
 
-logs-now () {
-  # activate virtual environment
-  tron;
-
-  # handle tier argument
-  if [ $1 == "sqa3" ]; then
-    . p -t sqa3 -f -r ReadOnly;
-  elif [ $1 == "subsrc" ]; then
-    . p -t subsrc -f -r ReadOnly;
-  else
-    . p -t clon;
-  fi
-
-  awslogs get -GS -w -s '5 minutes ago' ${1}-${2}
-}
 
 # logs tier service -s "x hour/hours/days ago" -f "search string"
 logs() {
@@ -135,6 +115,21 @@ logs() {
   else
     awslogs get -GS -s "${4}" -f "\"${6}\"" ${1}-${2}
   fi
+}
+
+# logs Bill O'Reilly style - "We'll do it live!"
+logs-now () {
+  # activate virtual environment
+  tron;
+
+  # generate AWS credentials
+  if [ $1 == "tulsarc" ]; then
+    . p -t clon -f -r ReadOnly;
+  else
+    . p -t $1 -f -r ReadOnly;
+  fi
+
+  awslogs get -GS -w -s '5 minutes ago' ${1}-${2}
 }
 
 # box = $1
