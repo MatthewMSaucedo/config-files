@@ -90,6 +90,9 @@ db() {
   if [[ $1 == *"sqa"* ]]; then
     . p -t $1 -f -r ReadOnly;
     m -t $1;
+  elif [[ $1 == *"tulsa"* ]]; then
+    . p -t $1;
+    m -t $1;
   else
     . p -t clon -r Administrator -f
     m -t $1 -c ${1}/rds/immediamaster;
