@@ -4,12 +4,10 @@
 alias gf="git fetch"
 alias grom="gf; git rebase origin/master"
 alias grot="gf; git rebase origin/testing"
-alias gaa="git add -A"
 alias gcan="git commit --amend --no-edit"
-alias gacan="gaa; gcan"
-alias gp="git push"
+alias gacan="git add .; gcan"
 alias gpf="git push --force-with-lease"
-alias gup="gacan;gpf"
+alias togo="gacan;gpf"
 alias pull="git pull"
 alias gpom="git pull origin master"
 alias gpot="git pull origin testing"
@@ -17,7 +15,6 @@ alias cb="git rev-parse --abbrev-ref HEAD"
 alias branch="git branch"
 alias gfp="git fetch; git pull"
 alias remote="git remote set-url origin "
-alias mergeymerge="git merge --no-ff origin/feat_subscriptions"
 
 checkout () {
   git checkout $1;
@@ -32,7 +29,7 @@ nb () {
 }
 
 gacp () {
-  gaa; git commit -m "$1"; gpf;
+  git add .; git commit -m "$1"; gpf;
 }
 
 
@@ -53,12 +50,9 @@ cru () {
 # NAVIGATION
 ############################################################
 alias nc="cd ~/code"
-alias nima="nc; cd im-alexa"
 alias nr="nc; cd rest"
 alias nconfig="nc; cd config-files"
-alias nccs="nc; cd cam_connection"
 alias nh="cd ~"
-alias nsalp="nc; cd service_audit_log_parsing"
 alias ..="cd .."
 alias ...="cd ../.."
 
@@ -91,7 +85,7 @@ db() {
     . p -t $1 -f -r ReadOnly;
     m -t $1;
   elif [[ $1 == *"tulsa"* ]]; then
-    . p -t $1;
+    . p -t clon -r Administrator -f;
     m -t $1;
   else
     . p -t clon -r Administrator -f
@@ -120,7 +114,6 @@ logs() {
   fi
 }
 
-# logs Bill O'Reilly style - "We'll do it live!"
 logs-now () {
   # activate virtual environment
   tron;
@@ -154,7 +147,9 @@ boxit() {
 ############################################################
 alias sys="neofetch"
 alias doom="~/.emacs.d/bin/doom"
-alias emacs="/usr/local/Cellar/emacs-plus@26/26.3/bin/emacs"
+#alias emacs="/usr/local/Cellar/emacs-plus@26/26.3/bin/emacs"
+alias emacs="emacsclient"
+alias e="emacs"
 alias pretty="source ~/.bash_profile"
 
 install () {
