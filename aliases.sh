@@ -85,8 +85,14 @@ db() {
     . p -t $1 -f -r ReadOnly;
     m -t $1;
   elif [[ $1 == *"tulsa"* ]]; then
-    . p -t clon -r Administrator -f;
-    m -t $1;
+    # grant rw for tulsadev
+    if [[ $1 == "tulsadev" ]]; then
+      . p -t clon
+      m -t $1 -c tulsadev/rds/rw
+    else
+      . p -t clon -r Administrator -f;
+      m -t $1;
+    fi
   else
     . p -t clon -r Administrator -f
     m -t $1 -c ${1}/rds/immediamaster;
