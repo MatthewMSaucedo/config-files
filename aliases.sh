@@ -7,7 +7,7 @@ alias grot="gf; git rebase origin/testing"
 alias gcan="git commit --amend --no-edit"
 alias gacan="git add .; gcan"
 alias gpf="git push --force-with-lease"
-alias togo="gacan;gpf"
+alias wam!="gacan;gpf"
 alias pull="git pull"
 alias gpom="git pull origin master"
 alias gpot="git pull origin testing"
@@ -64,7 +64,7 @@ alias ...="cd ../.."
 alias tron="nh; . myvenv/bin/activate"
 
 auth () {
-  if [ $1 == "amz" ]; then
+  if [[ $1 == "amz" ]]; then
     kinit;
   else
     mwinit -o;
@@ -98,7 +98,6 @@ db() {
     m -t $1 -c ${1}/rds/immediamaster;
   fi
 }
-
 
 # logs tier service -s "x hour/hours/days ago" -f "search string"
 logs() {
@@ -139,11 +138,22 @@ logs-now () {
 # example:
 # $ boxit stag rest/app/file.txt
 boxit() {
-  if [ $1 == "tulsadev" ]; then
+  if [[ $1 == "tulsadev" ]]; then
     scp $2 ec2-user@${1}:/home/ec2-user/tulsa/${2};
+  elif [[ $1 == "subsdev" ]]; then
+    if [[ $2 == *"im-"* ]]; then
+      scp $2 ec2-user@${1}:/home/ec2-user/subscriptions/libs/${2};
+    else
+      scp $2 ec2-user@${1}:/home/ec2-user/subscriptions/${2};
+    fi
   else
     scp $2 ec2-user@${1}:/home/ec2-user/system/${2};
   fi
+}
+
+ss() {
+  echo "fields @timestamp, @message"
+  echo "| sort @timestamp desc | filter @message =~ /${1}/"
 }
 
 
