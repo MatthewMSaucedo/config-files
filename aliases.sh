@@ -151,6 +151,7 @@ boxit() {
   fi
 }
 
+# TODO: look into adding more args to this -- append each arg for search. Seems like this might work?
 ss() {
   echo "fields @timestamp, @message"
   echo "| sort @timestamp desc | filter @message =~ /${1}/"
