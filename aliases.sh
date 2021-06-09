@@ -151,6 +151,12 @@ boxit() {
   fi
 }
 
+gemget() {
+  nc;
+  cd $2;
+  scp ec2-user@${1}:~/system/${2}/Gemfile.lock .;
+}
+
 # TODO: look into adding more args to this -- append each arg for search. Seems like this might work?
 ss() {
   echo "fields @timestamp, @message"
