@@ -63,6 +63,10 @@ alias ...="cd ../.."
 ############################################################
 alias tron="nh; . myvenv/bin/activate"
 
+# Manually calling these to avoid gem installed version being used
+alias m="~/code/sshconfig/bashrc/scripts/m"
+alias p="~/code/sshconfig/bashrc/scripts/p"
+
 auth () {
   if [[ $1 == "amz" ]]; then
     kinit;
@@ -87,7 +91,8 @@ db() {
   elif [[ $1 == *"tulsa"* ]]; then
     # grant rw for tulsadev
     if [[ $1 == "tulsadev" ]]; then
-      . p -t clon
+      #. p -t clon
+      . p -t clon -r Administrator -f;
       m -t $1 -c tulsadev/rds/rw
     else
       . p -t clon -r Administrator -f;
@@ -157,6 +162,11 @@ gemget() {
   scp ec2-user@${1}:~/system/${2}/Gemfile.lock .;
 }
 
+# fields @timestamp, @message
+# | sort @timestamp desc
+# | limit 1000
+# | filter @message =~ /ommand/
+# | filter !strcontains(@message, "command_seq")
 # TODO: look into adding more args to this -- append each arg for search. Seems like this might work?
 ss() {
   echo "fields @timestamp, @message"
@@ -171,7 +181,7 @@ ss() {
 alias sys="neofetch"
 alias doom="~/.emacs.d/bin/doom"
 #alias emacs="/usr/local/Cellar/emacs-plus@26/26.3/bin/emacs"
-alias emacs="emacsclient"
+#alias emacs="emacsclient"
 alias e="emacs"
 alias pretty="source ~/.bash_profile"
 
