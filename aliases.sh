@@ -107,7 +107,7 @@ db() {
 # logs tier service -s "x hour/hours/days ago" -f "search string"
 logs() {
   # activate virtual environment
-  tron;
+  #tron;
 
   # generate AWS credentials
   if [ $1 == "tulsarc" ]; then
@@ -156,6 +156,7 @@ boxit() {
   fi
 }
 
+# gegmet tst1 rest
 gemget() {
   nc;
   cd $2;
@@ -172,6 +173,9 @@ ss() {
   echo "fields @timestamp, @message"
   echo "| sort @timestamp desc | filter @message =~ /${1}/"
 }
+
+alias unit="bundle exec rake test"
+alias int="bundle exec rake integration"
 
 
 
