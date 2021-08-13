@@ -163,15 +163,14 @@ gemget() {
   scp ec2-user@${1}:~/system/${2}/Gemfile.lock .;
 }
 
-# fields @timestamp, @message
-# | sort @timestamp desc
-# | limit 1000
-# | filter @message =~ /ommand/
-# | filter !strcontains(@message, "command_seq")
-# TODO: look into adding more args to this -- append each arg for search. Seems like this might work?
+# For searching through Cloudwatch on AWS
 ss() {
   echo "fields @timestamp, @message"
-  echo "| sort @timestamp desc | filter @message =~ /${1}/"
+  echo "| sort @timestamp desc"
+  for filter in "$@"
+  do
+    echo "| filter @message =~ /${filter}/"
+  done
 }
 
 alias unit="bundle exec rake test"
