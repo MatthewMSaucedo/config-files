@@ -197,7 +197,17 @@ screens () {
   displayplacer "id:73CF9F11-0C53-0B30-1C5A-34826A0F799A res:1792x1120 hz:59 color_depth:4 scaling:on origin:(0,0) degree:0" "id:55BB86DD-EA37-F203-9600-A7A5F4D7DC68 res:1920x1080 hz:60 color_depth:4 scaling:off origin:(1859,-291) degree:0" "id:F67ADA61-D9A7-DDB6-8486-57CF98E1A7CA res:1920x1080 hz:60 color_depth:4 scaling:off origin:(-61,-1080) degree:0" "id:549B5283-D8D6-7051-72CE-47D299985920 res:1080x1920 hz:60 color_depth:4 scaling:off origin:(-1141,-857) degree:270"
 }
 
+killport() {
+  lsof -i TCP:$1 | grep LISTEN | awk '{print $2}' | xargs kill -9
+}
 
+# alt kill port
+ice() {
+  pid=$(lsof -ti tcp:8080)
+  if [[ $pid ]]; then
+    kill -9 $pid
+  fi
+}
 
 ################
 # MISC
