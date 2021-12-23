@@ -68,6 +68,7 @@ alias tron="nh; . myvenv/bin/activate"
 alias m="~/code/sshconfig/bashrc/scripts/m"
 alias p="~/code/sshconfig/bashrc/scripts/p"
 
+# bsync -- rsync, but for Blink!
 # Sync local directory with remote
 # t TIER
 #   descr: remote tier
@@ -82,7 +83,7 @@ alias p="~/code/sshconfig/bashrc/scripts/p"
 #
 # -a
 #   descr: sync all remote services
-sync () {
+bsync () {
   local valid_service_set=(
     "rest"
     "connection"
@@ -109,6 +110,7 @@ sync () {
               local a=1
               ;;
           h  )
+              echo "bsync - like rsync, but for Blink!"
               echo "Sync local directory with remote"
               echo "-t \$TIER"
               echo "  descr: remote tier"
