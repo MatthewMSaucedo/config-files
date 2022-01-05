@@ -70,7 +70,7 @@ alias p="~/code/sshconfig/bashrc/scripts/p"
 
 # bsync -- rsync, but for Blink!
 # Sync local directory with remote
-# t TIER
+# -t TIER
 #   descr: remote tier
 #   required: false
 #   default: tst1
@@ -97,6 +97,7 @@ bsync () {
   )
 
   # grab args
+  # TODO: Add optional verbose flag (P) option
   local OPTIND
   while getopts ":t:s:ah" opt ; do
       case "$opt" in
@@ -170,15 +171,15 @@ bsync () {
   # TODO: Add lib handling
   # depending on tier, determing service path
   if [ $t == *"subs"* ]; then
-    local tier_service_path="subscription"
+    local tier_service_path="subscriptions"
   elif [ $t == *"tulsa"* ]; then
     local tier_service_path="tulsa"
   else
     local tier_service_path="system"
   fi
 
-  #echo "rsync -a ~/code/${s} ec2-user@${t}:/home/ec2-user/${tier_service_path}/${s};"
-  rsync -a ~/code/${s} ec2-user@${t}:/home/ec2-user/${tier_service_path}/${s};
+  #echo "rsync -aP ~/code/${s}/ ec2-user@${t}:/home/ec2-user/${tier_service_path}/${s};"
+  rsync -aP ~/code/${s}/ ec2-user@${t}:/home/ec2-user/${tier_service_path}/${s};
 }
 
 auth () {
@@ -246,7 +247,7 @@ super-logs() {
   echo "TODO"
 }
 
-logs-now () {
+tail-logs () {
   # activate virtual environment
   #tron;
 
