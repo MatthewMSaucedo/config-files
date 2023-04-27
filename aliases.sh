@@ -1,15 +1,26 @@
 ################
-# GITHUB
+# GIT
 ############################################################
+# git submodule foreach --recursive 'git {command}'
+
 alias gf="git fetch"
 alias grom="gf; git rebase origin/master"
-alias gaa="git add -A"
+alias grot="gf; git rebase origin/testing"
 alias gcan="git commit --amend --no-edit"
-alias gacan="gaa; gcan"
-alias gp="git push"
-alias gpf="git push -f"
+alias gacan="git add .; gcan"
+alias gpf="git push --force-with-lease"
+alias wam!="gacan;gpf"
 alias pull="git pull"
 alias gpom="git pull origin master"
+alias gpot="git pull origin testing"
+alias cb="git rev-parse --abbrev-ref HEAD"
+alias branch="git branch"
+alias gfp="git fetch; git pull"
+alias remote="git remote set-url origin "
+
+checkout () {
+  git checkout $1;
+}
 
 clone () {
   git clone $1;
@@ -20,64 +31,107 @@ nb () {
 }
 
 gacp () {
-  gaa; git commit -m "$1"; gpf;
+  git add .; git commit -m "$1"; gpf;
 }
+
+
+
+################
+# react
+############################################################
+# start webapp
+alias fe-start="npm run start"
+
+# build webapp
+alias fe-build="npm run build --production"
+
+# deploy build to netlify
+alias fe-deploy="netlify deploy --prod"
 
 
 
 ################
 # NAVIGATION
 ############################################################
+alias config="cd ~/code/config-files"
 alias nc="cd ~/code"
-alias ninrb="nc; cd imNotRacistBot"
-alias nps="nc; cd MSaucedoWeb"
-alias nbm="nc; cd budget-me"
-alias nconfig="nc; cd bash_config"
-alias ncsi="nc; cd acquia/CoronaStateInfo"
-
-
-
-###############
-# WEB DEV
-############################################################
-alias ngs="ng serve"
-
-
-
-###############
-# APT-GET
-############################################################
-alias update="sudo apt-get update"
-alias upgrade="sudo apt-get upgrade"
-alias upd-upg="sudo apt-get update && sudo apt-get upgrade -y"
-
-install () {
-  sudo apt-get install $1
-}
-
-remove () {
-  sudo apt-get remove $1
-}
+alias nr="nc; cd rest"
+alias nconfig="nc; cd config-files"
+alias nh="cd ~"
+alias ..="cd .."
+alias ...="cd ../.."
 
 
 
 ################
 # SYSTEM
 ############################################################
-alias ubuntu="lsb_release -a"
+alias ds="sudo systemctl start docker"
 alias sys="neofetch"
-alias cpu="sensors"
-alias ssd="sudo hddtemp /dev/sda1"
-alias hdd="sudo hddtemp /dev/sdb1"
-alias gpu="watch -n 2 nvidia-smi"
+alias doom="~/.emacs.d/bin/doom"
+#alias emacs="/usr/local/Cellar/emacs-plus@26/26.3/bin/emacs"
+#alias emacs="emacsclient"
+alias e="emacs"
+alias pretty="source ~/.bash_profile"
 
-terminate () {
-  pkill -f $1;
+install () {
+  sudo dnf install $1;
 }
 
-# Takes port number and kills any running process there
-killprocess () {
-  fuser -k ${1}/tcp;
+update () {
+  sudo dnf update;
+}
+
+upgrade () {
+  sudo dnf upgrade;
+}
+
+remove () {
+  sudo dnf remove $1;
+}
+
+i () {
+  update; install $1;
+}
+
+# Sets screens to correct orientation
+screens () {
+  var display_details="
+id:73CF9F11-0C53-0B30-1C5A-34826A0F799A res:1792x1120 hz:59 color_depth:4 scaling:on origin:(0,0) degree:0
+id:000010AC-0000-415D-4131-465700000000 res:1920x1080 hz:60 color_depth:4 scaling:off origin:(-63,-1080) degree:0
+id:000010AC-0000-415D-4135-395700000000 res:1920x1080 hz:60 color_depth:4 scaling:off origin:(-1920,0) degree:0
+id:000006B3-0000-22CC-0101-010100000000 res:1920x1080 hz:60 color_depth:4 scaling:off origin:(1792,0) degree:0"
+
+  displayplacer $display_details
+}
+
+killport() {
+  lsof -i TCP:$1 | grep LISTEN | awk '{print $2}' | xargs kill -9
+}
+
+# alt kill port
+ice() {
+  pid=$(lsof -ti tcp:8080)
+  if [[ $pid ]]; then
+    kill -9 $pid
+  fi
+}
+
+
+
+################
+# Writing
+############################################################
+pdf() {
+  if [ "$#" -ne 2 ]; then
+    afterwriting --source ${1}.fountain --pdf;
+  else
+    if [${2} == "ucb"]; then
+      afterwriting --source ${1}.fountain --pdf --setting print_title_page=false
+    else
+      echo "pdf(sketch_name:, ucb)"
+    fi
+  fi
 }
 
 
@@ -85,17 +139,8 @@ killprocess () {
 ################
 # MISC
 ############################################################
-alias style="termite-style; termite-style" # First navigates to directory, second launches program.
-alias vls="ls -1" # Vertical print of directory contents.
-alias vlsa="ls -1a"
+alias please='sudo $(history -p !!)'
 
-javar () {
-  javac ${1}.java;
-  java $1;
-}
+alias rr="curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash"
 
-brrr () {
-  sudo $1;
-}
-
-
+alias hack="say -r 30 -v Yuri 'Your social security number has been compromised. Press 1 to speak to an officer.'"
