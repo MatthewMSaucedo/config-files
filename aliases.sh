@@ -1,6 +1,8 @@
 ################
 # GIT
 ############################################################
+# git submodule foreach --recursive 'git {command}'
+
 alias gf="git fetch"
 alias grom="gf; git rebase origin/master"
 alias grot="gf; git rebase origin/testing"
@@ -35,14 +37,16 @@ gacp () {
 
 
 ################
-# AMAZON CR
+# react
 ############################################################
-alias crn="cr -new"
+# start webapp
+alias fe-start="npm run start"
 
-# cr update
-cru () {
-  cr -r CR-${1}
-}
+# build webapp
+alias fe-build="npm run build --production"
+
+# deploy build to netlify
+alias fe-deploy="netlify deploy --prod"
 
 
 
@@ -60,252 +64,9 @@ alias ...="cd ../.."
 
 
 ################
-# REMOTE
-############################################################
-alias tron="nh; . myvenv/bin/activate"
-
-# Manually calling these to avoid gem installed version being used
-alias m="~/code/sshconfig/bashrc/scripts/m"
-alias p="~/code/sshconfig/bashrc/scripts/p"
-
-# bsync -- rsync, but for Blink!
-# Sync local directory with remote
-# -t TIER
-#   descr: remote tier
-#   required: false
-#   default: tst1
-#
-# # TODO: Take in array of services
-# -s SERVICE
-#   descr: service
-#   required: false
-#   default: pwd if pwd ∈ services
-#
-# -a
-#   descr: sync all remote services
-bsync () {
-  local valid_service_set=(
-    "rest"
-    "connection"
-    "process"
-    "instruction"
-    "cam_connection"
-    "dashboard"
-    "tulsa_dashboard"
-    "subs_processor"
-    "subs_api"
-  )
-
-  # grab args
-  # TODO: Add optional verbose flag (P) option
-  local OPTIND
-  while getopts ":t:s:ah" opt ; do
-      case "$opt" in
-          t  )   # tier
-              local t="$OPTARG"
-              ;;
-          s  )   # service
-              local s="$OPTARG"
-              ;;
-          a  )   # set flag to sync all services
-              local a=1
-              ;;
-          h  )
-              echo "bsync - like rsync, but for Blink!"
-              echo "Sync local directory with remote"
-              echo "-t \$TIER"
-              echo "  descr: remote tier"
-              echo "  required: false"
-              echo "  default: tst1"
-              echo ""
-              echo "-s \$SERVICE"
-              echo "  descr: service"
-              echo "  required: false"
-              echo "  default: pwd if pwd ∈ valid_service_set"
-              echo ""
-              echo "-a"
-              echo "  descr: syncs all services"
-              echo "  required: false"
-              echo "  default: false"
-              echo ""
-              return
-              ;;
-          \? )
-              echo "Invalid option: -$OPTARG" >&2
-              echo "halting execution - please consult documentation with the -h flag"
-              return
-              ;;
-          :  )
-              echo "Option -$OPTARG requires an argument." >&2
-              echo "halting execution - please consult documentation with the -h flag"
-              return
-              ;;
-      esac
-  done
-
-  # set tier default to tst1
-  if [ -z "$t" ] ; then t=tst1 ; fi
-
-  # set service default to pwd ∈ valid_service_set
-  if [ -z "$s" ] ; then
-    local s=$(basename "`pwd`");
-    local valid_service=0
-    for item in "${valid_service_set[@]}"; do
-      if [[ $item = $s ]]; then
-        valid_service=1
-      fi
-    done
-    if [ $valid_service == 0 ]; then
-        echo "Invalid service: ${s}"
-        echo "halting execution - please consult documentation with the -h flag"
-        return
-    fi
-  fi
-
-  if [[ -n "$a" ]] ; then
-    # TODO: implement -a flag
-    echo "-a flag supplied, but not currently supported... sorry!"
-  fi
-  shift $((OPTIND-1))
-
-  # TODO: Add lib handling
-  # depending on tier, determing service path
-  if [ $t == *"subs"* ]; then
-    local tier_service_path="subscriptions"
-  elif [ $t == *"tulsa"* ]; then
-    local tier_service_path="tulsa"
-  else
-    local tier_service_path="system"
-  fi
-
-  #echo "rsync -aP ~/code/${s}/ ec2-user@${t}:/home/ec2-user/${tier_service_path}/${s};"
-  rsync -aP ~/code/${s}/ ec2-user@${t}:/home/ec2-user/${tier_service_path}/${s};
-}
-
-auth () {
-  if [[ $1 == "amz" ]]; then
-    kinit;
-  else
-    mwinit -o;
-  fi
-}
-
-box() {
-  if [ $1 == "-a" ]; then
-    auth;
-    ssh ec2-user@${2};
-  elif [ $2 == "-a" ]; then
-    ssh ec2-user@${2};
-    auth;
-  else
-    ssh ec2-user@${1};
-  fi
-}
-
-db() {
-  if [[ $1 == *"sqa"* ]]; then
-    . p -t $1 -f -r ReadOnly;
-    m -t $1;
-  elif [[ $1 == *"tulsa"* ]]; then
-    # grant rw for tulsadev
-    if [[ $1 == "tulsadev" ]]; then
-      #. p -t clon
-      . p -t clon -r Administrator -f;
-      m -t $1 -c tulsadev/rds/rw
-    else
-      . p -t clon -r Administrator -f;
-      m -t $1;
-    fi
-  else
-    . p -t clon -r Administrator -f
-    m -t $1 -c ${1}/rds/immediamaster;
-  fi
-}
-
-# logs tier service -s "x hour/hours/days ago" -f "search string"
-logs() {
-  # generate AWS credentials
-  if [ $1 == "tulsarc" ]; then
-    . p -t clon -f -r ReadOnly;
-  else
-    . p -t $1 -f -r ReadOnly;
-  fi
-
-  # account for a search string
-  if [[ $# -ne 6 ]]; then
-    awslogs get -GS -s "${4}" ${1}-${2}
-  else
-    awslogs get -GS -s "${4}" -f "\"${6}\"" ${1}-${2}
-  fi
-}
-
-super-logs() {
-  # for tier in "$@"
-  # do
-  #   echo "logs u0${} -s ${1} -f ${2}";
-  # done | parallel -P6
-  echo "TODO"
-}
-
-tail-logs () {
-  # activate virtual environment
-  #tron;
-
-  # generate AWS credentials
-  if [ $1 == "tulsarc" ]; then
-    . p -t clon -f -r ReadOnly;
-  else
-    . p -t $1 -f -r ReadOnly;
-  fi
-
-  awslogs get -GS -w -s '5 minutes ago' ${1}-${2}
-}
-
-# box = $1
-# file_path = $2
-# example:
-# $ boxit stag rest/app/file.txt
-boxit() {
-  if [[ $1 == "tulsadev" ]]; then
-    scp $2 ec2-user@${1}:/home/ec2-user/tulsa/${2};
-  elif [[ $1 == "subsdev" ]]; then
-    if [[ $2 == *"im-"* ]]; then
-      scp $2 ec2-user@${1}:/home/ec2-user/subscriptions/libs/${2};
-    else
-      scp $2 ec2-user@${1}:/home/ec2-user/subscriptions/${2};
-    fi
-  elif [[ $2 == *"im-"* ]]; then
-    scp $2 ec2-user@${1}:/home/ec2-user/system/libs/${2};
-  else
-    scp $2 ec2-user@${1}:/home/ec2-user/system/${2};
-  fi
-}
-
-# gegmet tst1 rest
-gemget() {
-  nc;
-  cd $2;
-  scp ec2-user@${1}:~/system/${2}/Gemfile.lock .;
-}
-
-# For searching through Cloudwatch on AWS
-ss() {
-  echo "fields @timestamp, @message"
-  echo "| sort @timestamp desc"
-  for filter in "$@"
-  do
-    echo "| filter @message =~ /${filter}/"
-  done
-}
-
-alias unit="bundle exec rake unit"
-alias int="bundle exec rake integration"
-
-
-
-################
 # SYSTEM
 ############################################################
+alias ds="sudo systemctl start docker"
 alias sys="neofetch"
 alias doom="~/.emacs.d/bin/doom"
 #alias emacs="/usr/local/Cellar/emacs-plus@26/26.3/bin/emacs"
@@ -314,12 +75,34 @@ alias e="emacs"
 alias pretty="source ~/.bash_profile"
 
 install () {
-  brew install $1;
+  sudo dnf install $1;
+}
+
+update () {
+  sudo dnf update;
+}
+
+upgrade () {
+  sudo dnf upgrade;
+}
+
+remove () {
+  sudo dnf remove $1;
+}
+
+i () {
+  update; install $1;
 }
 
 # Sets screens to correct orientation
 screens () {
-  displayplacer "id:73CF9F11-0C53-0B30-1C5A-34826A0F799A res:1792x1120 hz:59 color_depth:4 scaling:on origin:(0,0) degree:0" "id:55BB86DD-EA37-F203-9600-A7A5F4D7DC68 res:1920x1080 hz:60 color_depth:4 scaling:off origin:(1859,-291) degree:0" "id:F67ADA61-D9A7-DDB6-8486-57CF98E1A7CA res:1920x1080 hz:60 color_depth:4 scaling:off origin:(-61,-1080) degree:0" "id:549B5283-D8D6-7051-72CE-47D299985920 res:1080x1920 hz:60 color_depth:4 scaling:off origin:(-1141,-857) degree:270"
+  var display_details="
+id:73CF9F11-0C53-0B30-1C5A-34826A0F799A res:1792x1120 hz:59 color_depth:4 scaling:on origin:(0,0) degree:0
+id:000010AC-0000-415D-4131-465700000000 res:1920x1080 hz:60 color_depth:4 scaling:off origin:(-63,-1080) degree:0
+id:000010AC-0000-415D-4135-395700000000 res:1920x1080 hz:60 color_depth:4 scaling:off origin:(-1920,0) degree:0
+id:000006B3-0000-22CC-0101-010100000000 res:1920x1080 hz:60 color_depth:4 scaling:off origin:(1792,0) degree:0"
+
+  displayplacer $display_details
 }
 
 killport() {
@@ -334,17 +117,30 @@ ice() {
   fi
 }
 
+
+
+################
+# Writing
+############################################################
+pdf() {
+  if [ "$#" -ne 2 ]; then
+    afterwriting --source ${1}.fountain --pdf;
+  else
+    if [${2} == "ucb"]; then
+      afterwriting --source ${1}.fountain --pdf --setting print_title_page=false
+    else
+      echo "pdf(sketch_name:, ucb)"
+    fi
+  fi
+}
+
+
+
 ################
 # MISC
 ############################################################
 alias please='sudo $(history -p !!)'
 
 alias rr="curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash"
-
-ugh () {
-  kinit -f;
-  sudo jamf policy -event profile-chrome;
-  sudo jamf policy -event profile-internally-signed-certificates;
-}
 
 alias hack="say -r 30 -v Yuri 'Your social security number has been compromised. Press 1 to speak to an officer.'"
