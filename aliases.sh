@@ -51,6 +51,16 @@ alias fe-deploy="netlify deploy --prod"
 
 
 ################
+# AWS
+############################################################
+# deploy cdk stack
+deploy-stack () {
+  cdk deploy --profile personal $1
+}
+
+
+
+################
 # NAVIGATION
 ############################################################
 alias config="cd ~/code/config-files"
@@ -132,6 +142,15 @@ pdf() {
       echo "pdf(sketch_name:, ucb)"
     fi
   fi
+}
+
+
+
+###############
+# Editing
+############################################################
+yt-audio() {
+  yt-dlp -f 'ba' -x  --audio-format mp3 $1 -o ${2}.mp3
 }
 
 
