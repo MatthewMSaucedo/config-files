@@ -53,10 +53,20 @@ alias fe-deploy="netlify deploy --prod"
 ################
 # AWS
 ############################################################
+# list cdk stacks
+alias stacks="cdk ls"
+
+# build cdk stacks
+build-stack () {
+  cdk synth $1
+}
+alias build-stacks="cdk synth --all"
+
 # deploy cdk stack
 deploy-stack () {
   cdk deploy --profile personal $1
 }
+alias deploy-stacks="cdk deploy --profile personal --all"
 
 
 
