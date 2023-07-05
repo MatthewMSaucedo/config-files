@@ -37,6 +37,19 @@ gacp () {
 
 
 ################
+# CarWorld
+############################################################
+# Zip pita bullshit node lambda for AWS deployment
+cw-zip-auth () {
+  cd ~/code/CarWorld/backend/infra/lambda/auth;
+  rm zip/function.zip;
+  zip -r zip/function.zip index.js package-lock.json package.json node_modules/;
+  cd -
+}
+
+
+
+################
 # react
 ############################################################
 # start webapp
