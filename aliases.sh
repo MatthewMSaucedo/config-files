@@ -101,7 +101,7 @@ alias ...="cd ../.."
 ############################################################
 alias ds="sudo systemctl start docker"
 alias sys="neofetch"
-alias doom="~/.emacs.d/bin/doom"
+alias doom="~/.config/emacs/bin/doom"
 #alias emacs="/usr/local/Cellar/emacs-plus@26/26.3/bin/emacs"
 #alias emacs="emacsclient"
 alias e="emacs"
@@ -172,6 +172,8 @@ pdf() {
 ###############
 # Editing
 ############################################################
+# yt-dlp -f 'ba' -x --audio-format mp3 --external-downloader-args "-ss 00:00:00.00 -to 00:03:00.00" https://www.youtube.com/watch?v=nXHwNQzXCbM -o long_electric.mp3
+# add time args
 yt-audio() {
   yt-dlp -f 'ba' -x  --audio-format mp3 $1 -o ${2}.mp3
 }
