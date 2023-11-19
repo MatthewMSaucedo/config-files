@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# name: pytest file
+# key: pytf
+# --
+import pytest
+
+from app.app import ${1:class}
+
+
+class TestApp:
+    def test_${2:test_name}(self):
+        """"""
+        $0

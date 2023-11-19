@@ -37,6 +37,54 @@ gacp () {
 
 
 ################
+# Python
+############################################################
+debug () {
+  pip install pytest
+  pip install debugpy
+}
+
+venv-c () {
+  python3 -m venv ./${1}
+}
+
+venv-a () {
+  source ./${1}/bin/activate
+}
+
+alias venv-d="deactivate"
+
+pyproj () {
+  # Create project dir
+  mkdir $1;
+  cd $1;
+
+  # Create venv
+  venv-c ${1}_env
+  venv-a ${1}_env
+
+  # Install emacs dap-debugger deps to venv
+  debug
+
+  # Create app dir
+  mkdir app
+  touch app/__init__.py
+  touch app/app.py
+
+  # Create test dir
+  mkdir tests
+  touch tests/__init__.py
+  touch tests/test_app.py
+
+  # Requirements
+  touch requirements.txt;
+  printf "six==1.12.0\nrequests==2.22.0" > requirements.txt # defaults
+  pip install -r requirements.txt
+}
+
+
+
+################
 # CarWorld
 ############################################################
 # Zip pita bullshit node lambda for AWS deployment

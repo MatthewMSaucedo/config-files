@@ -1,0 +1,6 @@
+#(4, []) -*- mode: snippet -*-
+# name: pytest params
+# key: pytp
+# --
+@pytest.mark.parametrize('${2:, args}', [${3:, args}])
+$0

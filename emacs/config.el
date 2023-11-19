@@ -85,14 +85,13 @@
       user-mail-address "themattsaucedo@gmail.com")
 
 (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-(doom-themes-treemacs-config)
+;; (doom-themes-treemacs-config)
+;; (treemacs-display-current-project-exclusively)
 
-;; Debugging (fuck you Stripe)
-(use-package dap-mode)
-(require 'dap-python)
-;; if you installed debugpy, you need to set this
-;; https://github.com/emacs-lsp/dap-mode/issues/306
-(setq dap-python-debugger 'debugpy)
+;; Treemacs specific project open
+(map! :leader
+      :desc "Open project in Treemacs"
+      "p t" #'treemacs-display-current-project-exclusively)
 
 (setq
  ;; truly forget what this was for
@@ -113,6 +112,10 @@
   (map! :leader :desc "Blacken Region" "m b r" #'python-black-region)
   (map! :leader :desc "Blacken Statement" "m b s" #'python-black-statement)
   )
+
+;; Python snippets
+(after! anaconda-mode
+  (set-company-backend! 'anaconda-mode '(company-anaconda company-yasnippet)))
 
 ;;  Pdf scrolling
 (setq doc-view-continuous t)
@@ -145,6 +148,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Debugging
 ;;;;;;;;;;;;;;;;;;;;;;;
+(use-package dap-mode
+  :after lsp-mode
+  :commands dap-debug
+  :hook ((python-mode . dap-ui-mode) (python-mode . dap-mode))
+  :config
+  (require 'dap-python)
+  (setq dap-python-debugger 'debugpy)
+  (defun dap-python--pyenv-executable-find (command)
+    (with-venv (executable-find "python")))
+
+  (add-hook 'dap-stopped-hook
+            (lambda (arg) (call-interactively #'dap-hydra))))
+
+(map! :leader
+      :desc "pytest proj in new buffer"
+      "p t" #'python-pytest)
+
 (general-auto-unbind-keys)
 (map! :leader
       :desc "debug session start"
@@ -163,11 +183,22 @@
       "d n" #'dap-next)
 (map! :leader
       :desc "debug breakpoint add"
-      "d l a" #'dap-breakpoint-add)
+      "d b a" #'dap-breakpoint-add)
 (map! :leader
       :desc "debug breakpoint delete"
-      "d l d" #'dap-breakpoint-delete)
+      "d b d" #'dap-breakpoint-delete)
+(map! :leader
+      :desc "debug show var buffer"
+      "d l" #'dap-ui-locals)
 
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Make venv python env work for tools like DAP
+;;;;;;;;;;;;;;;;;;;;;;;
+(defun dap-python--pyenv-executable-find (command)
+  (executable-find command))
+(map! :leader
+      :desc "activate pyvenv in current buffer (virtual activate)"
+      "v a" #'pyvenv-activate)
 
 ;; This results in ledger-toggle-current toggling the clear status of the whole
 ;; transaction instead of toggling just the current posting.
