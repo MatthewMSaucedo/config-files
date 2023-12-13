@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: http post
+# key: httppost
+# --
+${1:api}_res = requests.post(url=${2:url}, data=${3:body}, headers=${4:headers}).json()
+$0

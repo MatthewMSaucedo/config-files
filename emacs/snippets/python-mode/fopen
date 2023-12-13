@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: file open
+# key: fopen
+# group: object oriented
+# --
+with open('${1:file_path}') as file_content:
+     # file operations
+$0

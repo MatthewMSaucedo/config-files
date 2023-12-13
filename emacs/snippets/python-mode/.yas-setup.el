@@ -113,5 +113,4 @@ Else return ().method for Py3."
              (cdr (nth 2 (elpy-snippet-current-method-and-args)))
              ", "))
 
-;; Not sure what this did before, but it breaks python mode currently
 ;; (add-hook 'python-mode-hook #'yasnippet-snippets--fixed-indent)

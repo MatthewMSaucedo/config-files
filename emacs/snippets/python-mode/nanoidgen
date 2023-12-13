@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: nanoid gen
+# key: nanoidgen
+# group: object oriented
+# --
+from nanoid import generate
+id = generate()

@@ -74,12 +74,15 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-
-
-
+;;
+;;
+;;
+;;
 ;;;;;;;;;;;;;;;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Matthew's changes ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;; ;;
 ;; ;;;;;;;;;;;;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq vterm-timer-delay 0.01)
 
 (setq user-full-name "Matthew Saucedo"
       user-mail-address "themattsaucedo@gmail.com")
@@ -199,7 +202,3 @@
 (map! :leader
       :desc "activate pyvenv in current buffer (virtual activate)"
       "v a" #'pyvenv-activate)
-
-;; This results in ledger-toggle-current toggling the clear status of the whole
-;; transaction instead of toggling just the current posting.
-;;(setq ledger-clear-whole-transactions t)

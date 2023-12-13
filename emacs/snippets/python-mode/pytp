@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: pytest params
+# key: pytp
+# --
+@pytest.mark.parametrize(('${2:a, b, expected}'), [
+  pytest.param(${3:a_val, b_val, expected_val}, id='${4:test name}'),
+])$0

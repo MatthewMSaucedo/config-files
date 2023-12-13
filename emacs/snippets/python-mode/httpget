@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: http get
+# key: httpget
+# --
+get_${1:api}_res = requests.get(url=${2:url}, params=${3:params}, headers=${4:headers}).json()
+$0

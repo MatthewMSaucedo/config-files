@@ -8,6 +8,7 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
                                         ;(package! some-package)
+
 (package! fountain-mode)
 
 (package! gitconfig-mode
@@ -18,16 +19,15 @@
            :files ("gitignore-mode.el")))
 
 (package! enh-ruby-mode)
-(package! org-tree-slide)
-(package! org-bullets)
-(package! org-superstar)
+;;(package! org-tree-slide)
+;;(package! org-bullets)
+;;(package! org-superstar)
 (package! python-black)
 
 (package! flycheck-cfn)
 (package! cfn-mode)
 
 (package! with-venv)
-
 
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

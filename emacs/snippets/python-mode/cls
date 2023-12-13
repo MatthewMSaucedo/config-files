@@ -4,6 +4,6 @@
 # group: object oriented
 # --
 class ${1:class}:
-    def __init__(self${2:, args}):
+    def __init__(self${2:, arg_1, ... arg_n}):
     ${2:$(elpy-snippet-init-assignments yas-text)}
     $0
