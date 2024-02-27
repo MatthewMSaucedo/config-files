@@ -94,7 +94,7 @@
 ;; Treemacs specific project open
 (map! :leader
       :desc "Open project in Treemacs"
-      "p t" #'treemacs-display-current-project-exclusively)
+      "p t" #'treemacs-add-and-display-current-project-exclusively)
 
 (setq
  ;; truly forget what this was for
@@ -104,21 +104,6 @@
  ;; make vterm a lil bit snappier
  vterm-timer-delay 0.01
  )
-
-(use-package! python-black
-  :demand t
-  :after python
-  :config
-  (add-hook! 'python-mode-hook #'python-black-on-save-mode)
-  ;; Feel free to throw your own personal keybindings here
-  (map! :leader :desc "Blacken Buffer" "m b b" #'python-black-buffer)
-  (map! :leader :desc "Blacken Region" "m b r" #'python-black-region)
-  (map! :leader :desc "Blacken Statement" "m b s" #'python-black-statement)
-  )
-
-;; Python snippets
-(after! anaconda-mode
-  (set-company-backend! 'anaconda-mode '(company-anaconda company-yasnippet)))
 
 ;;  Pdf scrolling
 (setq doc-view-continuous t)
@@ -148,57 +133,98 @@
       :desc "Change title of buffer"
       "b t" #'rename-buffer)
 
+
+
+
+(use-package eglot
+  :ensure t
+  :config
+  (add-to-list 'eglot-server-programs '(python-mode . ("pyright")))
+
+  (setq-default eglot-workspace-configuration
+                '((:pylsp . (:configurationSources ["flake8"] :plugins (:pycodestyle (:enabled nil) :mccabe (:enabled nil) :flake8 (:enabled t))))))
+
+  :hook
+  ((python-mode . eglot-ensure)))
+
+(add-hook 'python-mode-hook #'lsp)
+
+(use-package! python-black
+  :demand t
+  :after python
+  :config
+  (add-hook! 'python-mode-hook #'python-black-on-save-mode)
+  ;; Feel free to throw your own personal keybindings here
+  (map! :leader :desc "Blacken Buffer" "m b b" #'python-black-buffer)
+  (map! :leader :desc "Blacken Region" "m b r" #'python-black-region)
+  (map! :leader :desc "Blacken Statement" "m b s" #'python-black-statement)
+  )
+
+;; (map! :leader
+;;       :desc "pytest proj in new buffer"
+;;       "p t" #'python-pytest)
+
+
+
+;; Python snippets
+(after! anaconda-mode
+  (set-company-backend! 'anaconda-mode '(company-anaconda company-yasnippet)))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Debugging
 ;;;;;;;;;;;;;;;;;;;;;;;
-(use-package dap-mode
-  :after lsp-mode
-  :commands dap-debug
-  :hook ((python-mode . dap-ui-mode) (python-mode . dap-mode))
-  :config
-  (require 'dap-python)
-  (setq dap-python-debugger 'debugpy)
-  (defun dap-python--pyenv-executable-find (command)
-    (with-venv (executable-find "python")))
+;; (use-package dap-mode
+;;   :after lsp-mode
+;;   :commands dap-debug
+;;   :hook ((python-mode . dap-ui-mode) (python-mode . dap-mode))
+;;   :config
+;;   (require 'dap-python)
+;;   (setq dap-python-debugger 'debugpy)
+;;   (defun dap-python--pyenv-executable-find (command)
+;;     (with-venv (executable-find "python")))
 
-  (add-hook 'dap-stopped-hook
-            (lambda (arg) (call-interactively #'dap-hydra))))
+;;   (add-hook 'dap-stopped-hook
+;;             (lambda (arg) (call-interactively #'dap-hydra))))
 
-(map! :leader
-      :desc "pytest proj in new buffer"
-      "p t" #'python-pytest)
-
-(general-auto-unbind-keys)
-(map! :leader
-      :desc "debug session start"
-      "d s s" #'dap-debug)
-(map! :leader
-      :desc "debug session delete"
-      "d s d" #'dap-delete-session)
-(map! :leader
-      :desc "debug eval"
-      "d e" #'dap-eval)
-(map! :leader
-      :desc "debug continue"
-      "d c" #'dap-continue)
-(map! :leader
-      :desc "debug next"
-      "d n" #'dap-next)
-(map! :leader
-      :desc "debug breakpoint add"
-      "d b a" #'dap-breakpoint-add)
-(map! :leader
-      :desc "debug breakpoint delete"
-      "d b d" #'dap-breakpoint-delete)
-(map! :leader
-      :desc "debug show var buffer"
-      "d l" #'dap-ui-locals)
+;; (general-auto-unbind-keys)
+;; (map! :leader
+;;       :desc "debug session start"
+;;       "d s s" #'dap-debug)
+;; (map! :leader
+;;       :desc "debug session delete"
+;;       "d s d" #'dap-delete-session)
+;; (map! :leader
+;;       :desc "debug eval"
+;;       "d e" #'dap-eval)
+;; (map! :leader
+;;       :desc "debug continue"
+;;       "d c" #'dap-continue)
+;; (map! :leader
+;;       :desc "debug next"
+;;       "d n" #'dap-next)
+;; (map! :leader
+;;       :desc "debug breakpoint add"
+;;       "d b a" #'dap-breakpoint-add)
+;; (map! :leader
+;;       :desc "debug breakpoint delete"
+;;       "d b d" #'dap-breakpoint-delete)
+;; (map! :leader
+;;       :desc "debug show var buffer"
+;;       "d l" #'dap-ui-locals)
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; Make venv python env work for tools like DAP
 ;;;;;;;;;;;;;;;;;;;;;;;
-(defun dap-python--pyenv-executable-find (command)
-  (executable-find command))
-(map! :leader
-      :desc "activate pyvenv in current buffer (virtual activate)"
-      "v a" #'pyvenv-activate)
+;; (defun dap-python--pyenv-executable-find (command)
+;; (executable-find command))
+;; (map! :leader
+;;       :desc "activate pyvenv in current buffer (virtual activate)"
+;;       "v a" #'pyvenv-activate)
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;; go
+;;;;;;;;;;;;;;;;;;;;;;;
+(after! lsp-mode
+  ;; https://github.com/emacs-lsp/lsp-mode/issues/3577#issuecomment-1709232622
+  (delete 'lsp-terraform lsp-client-packages))

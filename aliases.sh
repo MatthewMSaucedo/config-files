@@ -60,7 +60,7 @@ pyproj () {
 
   # Create venv
   venvc ${1}_env
-  venva ${1}_env
+  #venva ${1}_env
 
   # Install emacs dap-debugger deps to venv
   debug
@@ -78,8 +78,8 @@ pyproj () {
 
   # Requirements
   touch requirements.txt;
-  printf "six==1.12.0\nrequests==2.22.0" > requirements.txt # defaults
-  pip install -r requirements.txt
+  printf "requests==2.31.0" > requirements.txt # defaults
+  #pip install -r requirements.txt
 }
 
 

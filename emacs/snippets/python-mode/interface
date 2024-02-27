@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: interface
+# key: interface
+# group: object oriented
+# --
+from abc import ABC, abstractmethod # move me to top of file!
+class I${1:InterfaceName}(ABC):
+      @abstractmethod
+      def ${2:method}(self, $3 ):
+          pass
+    $0

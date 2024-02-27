@@ -1,5 +1,3 @@
-# !IMPORTANT: Don't put stuff in bashrc, it will probably get overwritten
-
 # get rid of annoying zsh message
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
@@ -15,3 +13,5 @@ source ~/code/config-files/environment_variables.sh
 # make the cli pretty
 source ~/code/config-files/ps1.sh
 
+# Gradle
+source "/home/matthew/.sdkman/bin/sdkman-init.sh"

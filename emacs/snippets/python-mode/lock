@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: lock
+# key: lock
+# group: concurrency
+# --
+from threading import Lock # move me to top of file!
+lock = Lock()
+with lock:
+     # logic
+$0

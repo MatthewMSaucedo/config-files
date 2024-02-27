@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: timenow
+# key: timenow
+# group: object oriented
+# --
+import time # move me to top of file!
+time.time()
+$0

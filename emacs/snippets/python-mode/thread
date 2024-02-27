@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: thread
+# key: thread
+# group: concurrency
+# --
+from threading import Thread # move me to top of file!
+thread = Thread(target=foo())
+$0

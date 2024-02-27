@@ -1,7 +1,9 @@
 # -*- mode: snippet -*-
 # name: enum
-# key: en
+# key: enum
 # group: object oriented
 # --
-class ${1:class}(Enum):
+from enum import Enum # move me to top of file!
+class ${1:ClassName}(Enum):
+      ${2:FIELD1} = 1
     $0
