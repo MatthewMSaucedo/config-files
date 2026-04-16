@@ -223,6 +223,12 @@ make-workspace() {
 }
 alias make-wksp=make-workspace
 
+sync-workspace() {
+  local repo="${1:?Usage: sync-workspace <repo_name>}"
+  workspaces dotfiles sync "matthew-saucedo-${repo}"
+}
+alias sync-wksp=sync-workspace
+
 # Derive a stable port (8300–8499) from workspace name + role.
 # Same hash is used on the workspace side to set PEON_RELAY_PORT.
 _ws_port() {
