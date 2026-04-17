@@ -219,7 +219,7 @@ org-ticket () {
 ############################################################
 make-workspace() {
   local repo="${1:?Usage: make-workspace <repo_name>}"
-  workspaces create "matthew-saucedo-${repo}" --repo "${repo}" --dotfiles DataDog/workspaces-dotfiles
+  workspaces create "matthew-saucedo-${repo}" --repo "${repo}"
 }
 alias make-wksp=make-workspace
 
